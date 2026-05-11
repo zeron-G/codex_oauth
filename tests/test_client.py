@@ -65,6 +65,7 @@ async def test_complete_collects_streaming_response() -> None:
     assert response.usage.total_tokens == 3
     assert seen["payload"]["model"] == "gpt-5.5"
     assert seen["payload"]["stream"] is True
+    assert seen["payload"]["instructions"] == "You are a helpful assistant."
     assert seen["headers"]["authorization"] == "Bearer access"
     assert seen["headers"]["chatgpt-account-id"] == "acct"
 
@@ -86,4 +87,3 @@ async def test_create_response_returns_raw_json() -> None:
         raw = await client.create_response(input="ping")
 
     assert raw["id"] == "resp_1"
-

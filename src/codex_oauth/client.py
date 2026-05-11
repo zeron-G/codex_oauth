@@ -14,6 +14,7 @@ from .types import LLMResponse, ToolCall, Usage
 
 DEFAULT_CODEX_BASE_URL = "https://chatgpt.com/backend-api/codex"
 DEFAULT_MODEL = "gpt-5.5"
+DEFAULT_INSTRUCTIONS = "You are a helpful assistant."
 
 
 class CodexOAuthError(RuntimeError):
@@ -278,8 +279,7 @@ class CodexOAuthClient:
             "stream": stream,
             "store": self.store,
         }
-        if instructions:
-            payload["instructions"] = instructions
+        payload["instructions"] = instructions or DEFAULT_INSTRUCTIONS
 
         normalized_tools = _normalize_tools(tools)
         if normalized_tools:
@@ -447,4 +447,3 @@ __all__ = [
     "extract_tool_calls",
     "messages_to_response_input",
 ]
-

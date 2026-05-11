@@ -17,6 +17,26 @@ Use this package only with your own local Codex login session. For shared apps, 
 - The code generation guide says Codex works best with latest GPT-5 family models such as `gpt-5.5`; Codex-specific models such as `gpt-5.3-codex` remain available for coding agents: <https://developers.openai.com/api/docs/guides/code-generation#use-codex>
 - The Responses API reference describes the official request and response shape for text/image inputs, tools, and streaming: <https://platform.openai.com/docs/api-reference/responses/create>
 
+The docs above support Codex login caching and the official Responses API model shape. They do not document the ChatGPT/Codex backend endpoint as a public OpenAI API. The OAuth bridge in this package is therefore an experimental local convenience, not a production API contract.
+
+## What was verified
+
+The package has two verification layers:
+
+1. Offline tests cover token loading, token refresh persistence, request payload conversion, auth headers, SSE parsing, and raw response calls.
+2. A live smoke test can be run from a machine with a valid Codex ChatGPT login:
+
+```powershell
+$env:PYTHONPATH="src"
+python -m codex_oauth.cli --json "Reply with exactly: codex_oauth_live_ok"
+```
+
+When the live call succeeds, the request is sent to `https://chatgpt.com/backend-api/codex/responses` with the bearer token loaded from Codex OAuth auth and, when present, the `ChatGPT-Account-ID` header. That means it is using the Codex/ChatGPT backend path rather than `https://api.openai.com/v1` and `OPENAI_API_KEY`.
+
+The Codex backend currently requires an `instructions` field. If you do not pass a system message or explicit `instructions`, the client sends `You are a helpful assistant.` as a default.
+
+Quota accounting is server-side and is not returned in the response payload. This client can confirm the transport path and authentication source; the exact quota bucket is controlled by OpenAI's backend.
+
 ## Install
 
 ```powershell
@@ -95,3 +115,18 @@ Other useful environment variables:
 - Treat Codex OAuth tokens as user-session credentials, not service credentials.
 - Prefer short local runs. For shared apps, CI, servers, or production, use the official OpenAI API key flow.
 
+## CI/CD
+
+This repository ships with GitHub Actions workflows:
+
+- `ci.yml`: runs lint, tests, bytecode compilation, package build, and package metadata checks on pushes and pull requests.
+- `release.yml`: builds distributions for `v*` tags, uploads release artifacts, creates a GitHub release, and can optionally publish to PyPI when the repository variable `PYPI_PUBLISH` is set to `true` and PyPI trusted publishing is configured.
+- `live-smoke.yml`: manual workflow for real LLM calls through Codex OAuth. Add `CODEX_OAUTH_ACCESS_TOKEN`, optional `CODEX_OAUTH_REFRESH_TOKEN`, and optional `CODEX_OAUTH_ACCOUNT_ID` as GitHub Actions secrets before running it.
+
+The default CI/CD does not run live Codex OAuth calls because GitHub Actions does not have access to your local `~/.codex/auth.json`. For local live verification:
+
+```powershell
+$env:CODEX_OAUTH_LIVE="1"
+$env:PYTHONPATH="src"
+python -m pytest -q tests/test_live.py
+```
