@@ -12,7 +12,7 @@ class Usage:
     total_tokens: int = 0
 
     @classmethod
-    def from_response_usage(cls, data: dict[str, Any] | None) -> "Usage":
+    def from_response_usage(cls, data: dict[str, Any] | None) -> Usage:
         data = data or {}
         input_tokens = int(data.get("input_tokens", data.get("prompt_tokens", 0)) or 0)
         output_tokens = int(data.get("output_tokens", data.get("completion_tokens", 0)) or 0)

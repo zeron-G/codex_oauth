@@ -10,8 +10,12 @@ import httpx
 import pytest
 
 from codex_oauth.grok_auth import (
-    DEFAULT_GROK_CLIENT_ID, DEFAULT_GROK_ISSUER, DEFAULT_GROK_REFRESH_URL,
-    GrokAuth, GrokAuthError, load_grok_tokens,
+    DEFAULT_GROK_CLIENT_ID,
+    DEFAULT_GROK_ISSUER,
+    DEFAULT_GROK_REFRESH_URL,
+    GrokAuth,
+    GrokAuthError,
+    load_grok_tokens,
 )
 
 SCOPE = f"{DEFAULT_GROK_ISSUER}::{DEFAULT_GROK_CLIENT_ID}"

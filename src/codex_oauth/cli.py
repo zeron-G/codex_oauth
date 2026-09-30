@@ -13,7 +13,7 @@ import httpx
 
 from . import create_client
 from .auth import CodexAuthError
-from .client import CodexAPIError, DEFAULT_MODEL
+from .client import DEFAULT_MODEL, CodexAPIError
 from .grok import DEFAULT_GROK_MODEL, GrokAPIError, GrokOAuthClient
 from .grok_auth import GrokAuthError
 

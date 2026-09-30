@@ -4,13 +4,12 @@ from __future__ import annotations
 import json
 import os
 from collections.abc import AsyncIterator, Mapping, Sequence
-from typing import Any
+from typing import Any, Self
 
 import httpx
 
 from .auth import CodexAuth, CodexAuthError, CodexTokens
 from .types import LLMResponse, ToolCall, Usage
-
 
 DEFAULT_CODEX_BASE_URL = "https://chatgpt.com/backend-api/codex"
 DEFAULT_MODEL = "gpt-5.5"
@@ -165,7 +164,7 @@ class CodexOAuthClient:
         self._client: httpx.AsyncClient | None = http_client
         self._timeout = timeout or httpx.Timeout(connect=10.0, read=300.0, write=30.0, pool=10.0)
 
-    async def __aenter__(self) -> "CodexOAuthClient":
+    async def __aenter__(self) -> Self:
         if self._client is None:
             self._client = httpx.AsyncClient(timeout=self._timeout)
         return self
@@ -447,3 +446,4 @@ __all__ = [
     "extract_tool_calls",
     "messages_to_response_input",
 ]
+

@@ -63,11 +63,11 @@ def _expiry(value: Any) -> float | None:
         return None
     try:
         if isinstance(value, bool):
-            raise ValueError
+            raise TypeError
         try:
             result = float(value)
         except (TypeError, ValueError):
-            dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            dt = datetime.fromisoformat(str(value))
             if dt.tzinfo is None:
                 raise ValueError
             result = dt.timestamp()

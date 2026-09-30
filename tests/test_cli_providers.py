@@ -5,8 +5,7 @@ import json
 
 import pytest
 
-from codex_oauth import LLMResponse
-from codex_oauth import cli
+from codex_oauth import LLMResponse, cli
 from codex_oauth.grok import GrokOAuthClient
 
 

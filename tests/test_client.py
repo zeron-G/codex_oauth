@@ -42,12 +42,10 @@ async def test_complete_collects_streaming_response() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         seen["headers"] = request.headers
         seen["payload"] = json.loads(request.content.decode())
-        data = "\n\n".join(
-            [
-                'data: {"type":"response.output_text.delta","delta":"hel"}',
-                'data: {"type":"response.output_text.delta","delta":"lo"}',
-                'data: {"type":"response.completed","response":{"model":"gpt-5.5","output":[{"type":"message","content":[{"type":"output_text","text":"hello"}]}],"usage":{"input_tokens":2,"output_tokens":1,"total_tokens":3}}}',
-            ]
+        data = (
+            'data: {"type":"response.output_text.delta","delta":"hel"}\n\n'
+            'data: {"type":"response.output_text.delta","delta":"lo"}\n\n'
+            'data: {"type":"response.completed","response":{"model":"gpt-5.5","output":[{"type":"message","content":[{"type":"output_text","text":"hello"}]}],"usage":{"input_tokens":2,"output_tokens":1,"total_tokens":3}}}'
         )
         return httpx.Response(200, headers={"content-type": "text/event-stream"}, text=data)
 
@@ -87,3 +85,4 @@ async def test_create_response_returns_raw_json() -> None:
         raw = await client.create_response(input="ping")
 
     assert raw["id"] == "resp_1"
+

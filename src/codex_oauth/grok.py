@@ -7,7 +7,7 @@ import re
 import shutil
 import subprocess
 from collections.abc import AsyncIterator, Mapping, Sequence
-from typing import Any
+from typing import Any, Self
 from urllib.parse import urlsplit
 
 import httpx
@@ -87,7 +87,7 @@ async def _sse(response: httpx.Response) -> AsyncIterator[dict[str, Any]]:
         line = line.removeprefix("\ufeff")
         if line.startswith("data:"):
             value = line[5:]
-            lines.append(value[1:] if value.startswith(" ") else value)
+            lines.append(value.removeprefix(" "))
         elif line == "" and lines:
             data = "\n".join(lines)
             lines.clear()
@@ -156,7 +156,7 @@ class GrokOAuthClient:
             connect=10.0, read=300.0, write=30.0, pool=10.0,
         )
 
-    async def __aenter__(self) -> GrokOAuthClient:
+    async def __aenter__(self) -> Self:
         await self._get_client()
         return self
 
@@ -280,7 +280,7 @@ class GrokOAuthClient:
             message = data["choices"][0]["message"]
             text = message.get("content") or ""
             if not isinstance(text, str):
-                raise ValueError
+                raise TypeError
             calls = []
             for call in message.get("tool_calls") or []:
                 function = call["function"]
