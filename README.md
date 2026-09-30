@@ -1,6 +1,10 @@
 # codex_oauth
 
-Experimental Python client for using the local Codex ChatGPT sign-in cache as an LLM transport.
+Experimental Python clients for using local Codex ChatGPT and Grok CLI sign-in caches as LLM transports.
+
+**Grok OAuth support:** see the [Grok setup and agent integration guide](docs/grok.md) for login, refresh, streaming, tool calls, model discovery and security limitations. Use `GrokOAuthClient` or `create_client("grok")`, or select `codex-oauth --provider grok` on the CLI. This is a Python SDK, not a hosted API proxy server.
+
+Existing Codex imports and CLI commands remain the default. The sections below describe the original **Codex provider**; Grok has separate credentials and a native Chat Completions transport.
 
 This is meant for local prototypes that already run Codex and want a small Responses-style client without copying OAuth tokens around. It keeps auth local, redacts token values in debug representations, and never prints tokens from the CLI.
 

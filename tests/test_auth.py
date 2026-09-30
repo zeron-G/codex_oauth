@@ -7,7 +7,12 @@ from datetime import UTC, datetime, timedelta
 import httpx
 import pytest
 
-from codex_oauth.auth import CodexAuth, CodexAuthError, load_codex_tokens, token_is_expired
+from codex_oauth.auth import (
+    CodexAuth,
+    CodexAuthError,
+    load_codex_tokens,
+    token_is_expired,
+)
 
 
 def _jwt(exp: int) -> str:

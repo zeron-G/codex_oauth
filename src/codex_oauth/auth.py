@@ -11,7 +11,6 @@ from typing import Any
 
 import httpx
 
-
 DEFAULT_AUTH_PATH = Path.home() / ".codex" / "auth.json"
 DEFAULT_CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann"
 DEFAULT_REFRESH_URL = "https://auth.openai.com/oauth/token"
@@ -58,7 +57,7 @@ class CodexTokens:
             f"source={self.source!r})"
         )
 
-    def with_updates(self, data: dict[str, Any]) -> "CodexTokens":
+    def with_updates(self, data: dict[str, Any]) -> CodexTokens:
         return CodexTokens(
             access_token=data.get("access_token", self.access_token),
             refresh_token=data.get("refresh_token", self.refresh_token),
@@ -87,7 +86,7 @@ def token_expires_at(access_token: str) -> int | None:
         claims = _json_b64url_decode(parts[1])
         exp = claims.get("exp")
         return int(exp) if exp is not None else None
-    except Exception:
+    except (AttributeError, TypeError, ValueError, OverflowError, RecursionError):
         return None
 
 
