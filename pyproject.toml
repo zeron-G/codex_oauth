@@ -5,13 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "codex-oauth"
 version = "0.1.0"
-description = "Experimental Python client for using the local Codex ChatGPT OAuth session as an LLM transport."
+description = "Experimental Python clients for local Codex and Grok CLI OAuth sessions."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "ANIMA Project" }]
-keywords = ["codex", "oauth", "openai", "responses", "llm"]
+keywords = ["codex", "grok", "oauth", "openai", "xai", "responses", "llm"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
